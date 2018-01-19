@@ -81,6 +81,7 @@ class Potential(object):
         :returns: Analytic solution to tapdole equations
         """
         extrema = solve(self._sympy_gradient, self.field_names, dict=True)
+        assert len(extrema) == 3
         extrema = sorted(extrema, key=self._sympy_potential.subs)
         return [np.array([extreme[n] for n in self.field_names]).astype(float)
                 for extreme in extrema]
