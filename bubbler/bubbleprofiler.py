@@ -19,8 +19,8 @@ def solve(potential,
           output=None,
           n_spline_samples=100,
           n_knots=10,
-          r_min=1E-4,
-          r_max=1E1):
+          rho_min=1E-4,
+          rho_max=1E1):
     """
     :param potential: Potential object or string
     :returns: Action, trajectory of bounce, time taken and extra information
@@ -56,8 +56,8 @@ def solve(potential,
                               output,
                               n_spline_samples,
                               n_knots,
-                              r_min,
-                              r_max,
+                              rho_min,
+                              rho_max,
                               false_vacuum,
                               true_vacuum)
     try:
