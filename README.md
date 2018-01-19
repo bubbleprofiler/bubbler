@@ -25,4 +25,7 @@ The tests I shared before can be repeated by
 
 ```
 python n_fields.py
+python alpha_tests.py
 ```
+
+NB I test against the develop branch of CosmoTransitions.
