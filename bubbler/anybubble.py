@@ -86,7 +86,7 @@ def solve(potential, output=None, dim=3, **kwargs):
     trajectory_data = trajectory_data[:, new_order]
 
     action_file = "{}/action.txt".format(output)
-    action = np.loadtxt(action_file)
+    action = float(np.loadtxt(action_file))
 
     return action, trajectory_data, time.time, command
 

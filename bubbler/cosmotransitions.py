@@ -60,7 +60,7 @@ def solve(potential, **kwargs):
     rho = np.reshape(profile.R, (len(profile.R), 1))
     trajectory_data = np.hstack((rho, fields))
 
-    return action, trajectory_data, time.time, fullTunneling
+    return action, trajectory_data, time.time, fullTunneling.__name__
 
 if __name__ == "__main__":
     import doctest
