@@ -79,7 +79,7 @@ def bubblers(potential, backends=None, **kwargs):
     """
     potential = Potential(potential) if isinstance(potential, str) else potential
     backends = backends if backends else BACKENDS
-    return [bubbler(potential, backend=backend) for backend in backends]
+    return {backend: bubbler(potential, backend=backend) for backend in backends}
 
 def profiles(potential, backends=None, **kwargs):
     """
@@ -95,7 +95,7 @@ def profiles(potential, backends=None, **kwargs):
     fig, ax = plt.subplots()
     colors = cycle(["Brown", "Green", "Blue"])
 
-    for result in results:
+    for result in results.itervalues():
 
         if not result.action:
             continue
