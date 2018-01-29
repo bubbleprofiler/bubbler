@@ -30,7 +30,7 @@ import matplotlib.pyplot as plt
 import numpy as np
 
 
-from potential import Potential
+from potential import Potential, one_dim_potential
 import cosmotransitions
 import bubbleprofiler
 import anybubble
@@ -74,7 +74,7 @@ def bubbler(potential, backend="cosmotransitions", **kwargs):
 
         return Solution(backend, None, None, None, None, error.message)
 
-def bubblers(potential, backends=None, **kwargs):
+def bubblers(potential, backends=None):
     """
     :param potential: Potential object or string
     :param backend: Code with which to solve bounce
@@ -152,11 +152,18 @@ def one_dim_bubblers(E, alpha, backends=None):
     E and alpha.
     :rtype: list of namedtuple
     """
-    assert 0.5 <= alpha <= 0.75
-    assert E > 0.
+    return bubblers(one_dim_potential(E, alpha), backends)
 
-    potential = "-{1} * ((4. * {0} - 3.) / 2. * f^2 + f^3 - {0} * f^4)"
-    return bubblers(potential.format(alpha, E), backends)
+def one_dim_profiles(E, alpha, backends=None):
+    """
+    :param E: Scale of one-dimensional potential
+    :type E: float
+    :param alpha: Shape of one-dimensional potential
+    :type alpha: float
+
+    Plots field profiles for all codes.
+    """
+    return profiles(one_dim_potential(E, alpha), backends=backends)
 
 
 if __name__ == "__main__":
