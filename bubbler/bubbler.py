@@ -74,7 +74,7 @@ def bubbler(potential, backend="cosmotransitions", **kwargs):
 
         return Solution(backend, None, None, None, None, error.message)
 
-def bubblers(potential, backends=None):
+def bubblers(potential, backends=None, **kwargs):
     """
     :param potential: Potential object or string
     :param backend: Code with which to solve bounce
@@ -83,7 +83,7 @@ def bubblers(potential, backends=None):
     """
     potential = Potential(potential) if isinstance(potential, str) else potential
     backends = backends if backends else BACKENDS
-    return {backend: bubbler(potential, backend=backend) for backend in backends}
+    return {backend: bubbler(potential, backend=backend, **kwargs) for backend in backends}
 
 def profiles(potential, backends=None, **kwargs):
     """
@@ -141,7 +141,7 @@ def profiles(potential, backends=None, **kwargs):
 
     plt.show()
 
-def one_dim_bubblers(E, alpha, backends=None):
+def one_dim_bubblers(E, alpha, backends=None, **kwargs):
     """
     :param E: Scale of one-dimensional potential
     :type E: float
@@ -152,9 +152,9 @@ def one_dim_bubblers(E, alpha, backends=None):
     E and alpha.
     :rtype: list of namedtuple
     """
-    return bubblers(one_dim_potential(E, alpha), backends)
+    return bubblers(one_dim_potential(E, alpha), backends, **kwargs)
 
-def one_dim_profiles(E, alpha, backends=None):
+def one_dim_profiles(E, alpha, backends=None, **kwargs):
     """
     :param E: Scale of one-dimensional potential
     :type E: float
@@ -163,7 +163,7 @@ def one_dim_profiles(E, alpha, backends=None):
 
     Plots field profiles for all codes.
     """
-    return profiles(one_dim_potential(E, alpha), backends=backends)
+    return profiles(one_dim_potential(E, alpha), backends=backends, **kwargs)
 
 
 if __name__ == "__main__":
