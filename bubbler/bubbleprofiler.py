@@ -9,7 +9,7 @@ Interface to BubbleProfiler
 
 
 from timer import clock
-from subprocess32 import check_output
+from subprocess32 import check_call
 import os
 import tempfile
 import numpy as np
@@ -48,7 +48,7 @@ def solve(potential,
                 "--domain-end {7} "
                 "{8} "
                 "{9} "
-                "> /dev/null")
+                "> /dev/null 2>&1")
 
     command = template.format(os.environ["BUBBLEPROFILER"],
                               potential.ginac_potential,
@@ -62,7 +62,7 @@ def solve(potential,
                               true_vacuum)
     try:
         with clock() as time:
-            check_output(command, shell=True)
+            check_call(command, shell=True)
     except Exception as error:
         raise RuntimeError("BubbleProfiler crashed: {}".format(error))
 
