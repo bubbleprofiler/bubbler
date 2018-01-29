@@ -17,6 +17,10 @@ Solve it with all codes:
 Plot results from a few codes:
 
 >>> profiles(ginac_potential)
+
+Look at a one-dimensional potential:
+
+>>> one_dim_bubblers(1., 0.6)
 """
 
 from collections import namedtuple
@@ -136,6 +140,24 @@ def profiles(potential, backends=None, **kwargs):
     ax.set_title(potential.potential_latex)
 
     plt.show()
+
+def one_dim_bubblers(E, alpha, backends=None):
+    """
+    :param E: Scale of one-dimensional potential
+    :type E: float
+    :param alpha: Shape of one-dimensional potential
+    :type alpha: float
+
+    :returns: Result from one-dimensional potential parameterised by
+    E and alpha.
+    :rtype: list of namedtuple
+    """
+    assert 0.5 <= alpha <= 0.75
+    assert E > 0.
+
+    potential = "-{1} * ((4. * {0} - 3.) / 2. * f^2 + f^3 - {0} * f^4)"
+    return bubblers(potential.format(alpha, E), backends)
+
 
 if __name__ == "__main__":
     import doctest

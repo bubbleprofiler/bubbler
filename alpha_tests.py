@@ -3,14 +3,15 @@ Compare results from different codes for a one-dimensional potential
 ====================================================================
 """
 
-from bubbler import bubblers, profiles, Potential
+from bubbler import one_dim_bubblers
 
 import numpy as np
 import matplotlib.pyplot as plt
 
 
-potential = "-1. * ((4. * {0} - 3.) / 2. * f^2 + f^3 - {0} * f^4)"
 alphas = np.linspace(0.5, 0.75, 500, endpoint=False)
+E = 1.
+
 
 action_ct = []
 action_bp = []
@@ -26,8 +27,8 @@ for alpha in alphas:
     print "alpha = {}".format(alpha)
     print "============================="
 
-    results = bubblers(potential.format(alpha),
-                       backends=['bubbleprofiler', 'cosmotransitions'])
+    results = one_dim_bubblers(E, alpha,
+                               backends=['bubbleprofiler', 'cosmotransitions'])
 
     action_bp.append(results['bubbleprofiler'].action)
     action_ct.append(results['cosmotransitions'].action)
@@ -35,14 +36,14 @@ for alpha in alphas:
     end_ct.append(results['cosmotransitions'].rho_end)
     time_bp.append(results['bubbleprofiler'].time)
     time_ct.append(results['cosmotransitions'].time)
-    
+
     for result in results.itervalues():
         print "backend = {}. action = {}".format(result.backend, result.action)
         print "command = ", result.command
 
 
 
-rdiff = [(a - b) / a if a and b else 1E5 for a, b in zip(action_ct, action_bp)]
+rdiff = [abs(a - b) / a if a and b else 1E5 for a, b in zip(action_ct, action_bp)]
 
 fig = plt.figure()
 plt.subplots_adjust(hspace=0.1)
