@@ -17,10 +17,12 @@ import numpy as np
 
 def solve(potential,
           output=None,
-          n_spline_samples=100,
-          n_knots=10,
+          n_spline_samples=10000,
+          n_knots=100,
           rho_min=1E-4,
-          rho_max=1E1):
+          rho_max=1E2,
+          rtol_action=1E-1,
+          rtol_fields=1E-1):
     """
     :param potential: Potential object or string
     :returns: Action, trajectory of bounce, time taken and extra information
@@ -48,6 +50,8 @@ def solve(potential,
                 "--domain-end {7} "
                 "{8} "
                 "{9} "
+                "--rtol-action {10} "
+                "--rtol-fields {11} "
                 "> /dev/null 2>&1")
 
     command = template.format(os.environ["BUBBLEPROFILER"],
@@ -59,7 +63,9 @@ def solve(potential,
                               rho_min,
                               rho_max,
                               false_vacuum,
-                              true_vacuum)
+                              true_vacuum,
+                              rtol_action,
+                              rtol_fields)
     try:
         with clock() as time:
             check_call(command, shell=True)
