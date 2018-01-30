@@ -17,12 +17,13 @@ import numpy as np
 
 def solve(potential,
           output=None,
-          n_spline_samples=10000,
-          n_knots=100,
+          n_spline_samples=1000,
+          n_knots=10,
           rho_min=1E-4,
-          rho_max=1E2,
+          rho_max=1E3,
           rtol_action=1E-1,
-          rtol_fields=1E-1):
+          rtol_fields=1E-1,
+          int_method='runge-kutta-4'):
     """
     :param potential: Potential object or string
     :returns: Action, trajectory of bounce, time taken and extra information
@@ -52,6 +53,7 @@ def solve(potential,
                 "{9} "
                 "--rtol-action {10} "
                 "--rtol-fields {11} "
+                "--integration-method {12} "
                 "> /dev/null 2>&1")
 
     command = template.format(os.environ["BUBBLEPROFILER"],
@@ -65,7 +67,8 @@ def solve(potential,
                               false_vacuum,
                               true_vacuum,
                               rtol_action,
-                              rtol_fields)
+                              rtol_fields,
+                              int_method)
     try:
         with clock() as time:
             check_call(command, shell=True)
