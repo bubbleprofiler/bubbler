@@ -34,9 +34,10 @@ from potential import Potential, one_dim_potential
 import cosmotransitions
 import bubbleprofiler
 import anybubble
+import shooting
 
 
-BACKENDS = ["cosmotransitions", "bubbleprofiler", "anybubble"]
+BACKENDS = ["cosmotransitions", "bubbleprofiler", "anybubble", "shooting"]
 
 attributes = ['backend', 'action', 'trajectory', 'rho_end', 'time', 'command']
 Solution = namedtuple('Solution', attributes)
@@ -62,11 +63,11 @@ def bubbler(potential, backend="cosmotransitions", **kwargs):
         # Make interpolation function from output
 
         trajectory = [interp(trajectory_data[:, 0], trajectory_data[:, i + 1])
-                      for i in range(potential.n_fields)]
+                      for i in range(potential.n_fields)] if trajectory_data is not None else None
 
         # Find maximum value of rho
 
-        rho_end = trajectory_data[-1, 0]
+        rho_end = trajectory_data[-1, 0] if trajectory_data is not None else None
 
         return Solution(backend, action, trajectory, rho_end, time, command)
 

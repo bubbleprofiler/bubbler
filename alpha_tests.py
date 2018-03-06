@@ -28,7 +28,7 @@ for alpha in alphas:
     print "============================="
 
     results = one_dim_bubblers(E, alpha,
-                               backends=['bubbleprofiler', 'cosmotransitions'])
+                               backends=['bubbleprofiler', 'cosmotransitions', 'shooting'])
 
     action_bp.append(results['bubbleprofiler'].action)
     action_ct.append(results['cosmotransitions'].action)

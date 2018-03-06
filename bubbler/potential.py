@@ -114,23 +114,28 @@ class Potential(object):
         plt.ylabel(self.potential_latex)
         plt.show()
 
-def one_dim_potential(E, alpha):
+class one_dim_potential(Potential):
     """
-    :param E: Scale of one-dimensional potential
-    :type E: float
-    :param alpha: Shape of one-dimensional potential
-    :type alpha: float
-
-    :returns: One-dimensional potential
-    :rtype: Potential
+    One-dimensional potential
     """
-    assert 0.5 <= alpha <= 0.75
-    assert E > 0.
+    def __init__(self, E, alpha):
+        """
+        :param E: Scale of one-dimensional potential
+        :type E: float
+        :param alpha: Shape of one-dimensional potential
+        :type alpha: float
+        """
+        assert 0.5 <= alpha <= 0.75
+        assert E > 0.
+        
+        self.E = E
+        self.alpha = alpha
 
-    potential = "-{1} * ((4. * {0} - 3.) / 2. * f^2 + f^3 - {0} * f^4)"
-    return Potential(potential.format(alpha, E),
-                     true_vacuum=[1.],
-                     false_vacuum=[0.])
+        potential = "-{1} * ((4. * {0} - 3.) / 2. * f^2 + f^3 - {0} * f^4)".format(alpha, E)
+        
+        super(one_dim_potential, self).__init__(potential,
+                                                true_vacuum=[1.],
+                                                false_vacuum=[0.])
 
 if __name__ == "__main__":
     import doctest
