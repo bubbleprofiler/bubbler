@@ -23,12 +23,15 @@ def solve(potential,
           rho_max=1E1,
           rtol_action=1E-1,
           rtol_fields=1E-1,
-          int_method='runge-kutta-4'):
+          int_method='runge-kutta-4',
+          dim=3):
     """
     :param potential: Potential object or string
     :returns: Action, trajectory of bounce, time taken and extra information
     :rtype: tuple
     """
+    
+    assert dim == 3, "dim = 3 only at the moment"
 
     # System call to BubblerProfiler executable
 

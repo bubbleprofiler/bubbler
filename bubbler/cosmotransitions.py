@@ -14,7 +14,7 @@ from timer import clock
 
 
 
-def solve(potential, **kwargs):
+def solve(potential, dim=3, **kwargs):
     """
     :param potential: Potential object or string
     :returns: Action, trajectory of bounce, time taken and extra information
@@ -48,6 +48,7 @@ def solve(potential, **kwargs):
             result = fullTunneling(guess,
                                    vector_potential,
                                    vector_gradient,
+                                   tunneling_init_params={'alpha': dim - 1},
                                    deformation_deform_params={'verbose': False},
                                    **kwargs)
         except Exception as error:
