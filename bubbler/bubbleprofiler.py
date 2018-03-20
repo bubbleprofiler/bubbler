@@ -45,6 +45,7 @@ def solve(potential,
                             for v in potential.true_vacuum])
 
     template = ("{0}/bin/run_cmd_line_potential --force-output "
+                "--perturbative "
                 "--potential '{1}' "
                 "{2} "
                 "--output-path {3} "
