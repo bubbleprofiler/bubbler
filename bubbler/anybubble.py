@@ -27,7 +27,7 @@ R = Subdivide[0, 100, 1000] // N;
 fields = Map[sol[[2]], R];
 traj = MapThread[Append, {{fields, R}}];
 Export["{5}/traj.txt", traj, "Table"];
-Export["{5}/action.txt", action];
+Export["{5}/action.txt", action // CForm];
 Quit[];
 """
 
