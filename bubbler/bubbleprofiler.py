@@ -18,11 +18,11 @@ from timer import clock
 def solve(potential,
           output=None,
           n_spline_samples=1000,
-          n_knots=10,
-          rho_min=1E-4,
-          rho_max=1E1,
-          rtol_action=1E-1,
-          rtol_fields=1E-1,
+          n_knots=100,
+          rho_min=-1.,
+          rho_max=-1.,
+          rtol_action=1E-3,
+          rtol_fields=1E-3,
           int_method='runge-kutta-4',
           dim=3):
     """
