@@ -19,26 +19,35 @@ def solve(potential, dim=3, **kwargs):
     :returns: Action, trajectory of bounce, time taken and extra information
     :rtype: tuple
     """
+    def get_fields(cosmo_fields):
+        """
+        :returns: Fields without CosmoTransitions signature
+        """
+        return [cosmo_fields[..., i] for i in range(potential.n_fields)]
 
     def vector_potential(cosmo_fields):
         """
         :returns: Potential in CosmoTransitions signature
         """
-        fields = [cosmo_fields[..., i] for i in range(potential.n_fields)]
+        fields = get_fields(cosmo_fields)
         return potential(*fields)
 
     def vector_gradient(cosmo_fields):
         """
         :returns: Gradient in CosmoTransitions signature
         """
-        fields = [cosmo_fields[..., i] for i in range(potential.n_fields)]
+        fields = get_fields(cosmo_fields)
         cosmo_gradient = np.empty_like(cosmo_fields)
         cosmo_gradient[..., :] = potential.gradient(*fields).T
         return cosmo_gradient.astype(float)
 
     # Make initial guess of trajectory
 
-    guess = np.array([potential.true_vacuum, potential.false_vacuum])
+    guess = np.empty([2, potential.n_fields])
+
+    for i in range(potential.n_fields):
+        guess[0, i] = potential.true_vacuum[i]
+        guess[1, i] = potential.false_vacuum[i]
 
     # Run CosmoTransitions
 

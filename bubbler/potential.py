@@ -77,7 +77,8 @@ class Potential(object):
         """
         :returns: Numerical solution to tapdole equations
         """
-        return np.array(nsolve(self._sympy_gradient, self.field_names, guess)).astype(float)
+        sol = nsolve(self._sympy_gradient, self.field_names, guess)
+        return np.array([float(s) for s in sol])
 
     @property
     def _solve(self):
