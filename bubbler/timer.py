@@ -10,10 +10,11 @@ import time
 class clock(object):
     """
     """
-    def __init__(self, name=None):
+    def __init__(self):
         """
         """
-        self.name = name if name else 'snippet'
+        self.start = None
+        self.time = None
 
     def __enter__(self):
         """
@@ -24,5 +25,5 @@ class clock(object):
     def __exit__(self, *args):
         """
         """
-        self.end = time.time()
-        self.time = self.end - self.start
+        end = time.time()
+        self.time = end - self.start

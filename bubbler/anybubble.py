@@ -7,13 +7,12 @@ Interface to AnyBubble
 >>> print solve(Potential(ginac_potential))
 """
 
+import os
+import tempfile
+import numpy as np
+from subprocess32 import check_output
 
 from timer import clock
-from subprocess32 import check_output
-import os
-import numpy as np
-import tempfile
-
 
 
 SCRIPT = """
@@ -31,6 +30,11 @@ Export["{5}/action.txt", action // CForm];
 Quit[];
 """
 
+def curly(array):
+    """
+    :returns: Array as a Mathematica string
+    """
+    return str(array.tolist()).replace('[', '{').replace(']', '}')
 
 def solve(potential, output=None, dim=3, **kwargs):
     """
@@ -49,7 +53,6 @@ def solve(potential, output=None, dim=3, **kwargs):
 
     # Make extrema in Mathematica format
 
-    curly = lambda array: str(array.tolist()).replace('[', '{').replace(']', '}')
     true_vacuum = curly(potential.true_vacuum)
     false_vacuum = curly(potential.false_vacuum)
 
@@ -68,7 +71,7 @@ def solve(potential, output=None, dim=3, **kwargs):
         f.write(script)
 
     # Execute Mathematica script
-    
+
     command = 'math -script {}'.format(script_file)
 
     try:

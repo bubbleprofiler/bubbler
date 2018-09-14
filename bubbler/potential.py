@@ -127,12 +127,12 @@ class one_dim_potential(Potential):
         """
         assert 0.5 <= alpha <= 0.75
         assert E > 0.
-        
+
         self.E = E
         self.alpha = alpha
 
         potential = "-{1} * ((4. * {0} - 3.) / 2. * f^2 + f^3 - {0} * f^4)".format(alpha, E)
-        
+
         super(one_dim_potential, self).__init__(potential,
                                                 true_vacuum=[1.],
                                                 false_vacuum=[0.])

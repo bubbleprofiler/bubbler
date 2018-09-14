@@ -7,12 +7,12 @@ Interface to BubbleProfiler
 >>> solve(Potential(ginac_potential))
 """
 
-
-from timer import clock
-from subprocess32 import check_call
 import os
 import tempfile
 import numpy as np
+from subprocess32 import check_call
+
+from timer import clock
 
 
 def solve(potential,
@@ -30,7 +30,7 @@ def solve(potential,
     :returns: Action, trajectory of bounce, time taken and extra information
     :rtype: tuple
     """
-    
+
     assert dim == 3, "dim = 3 only at the moment"
 
     # System call to BubblerProfiler executable

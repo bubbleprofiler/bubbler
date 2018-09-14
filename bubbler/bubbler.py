@@ -38,11 +38,14 @@ import anybubble
 
 BACKENDS = ["cosmotransitions", "bubbleprofiler", "anybubble"]
 
-attributes = ['backend', 'action', 'trajectory', 'rho_end', 'time', 'command']
-Solution = namedtuple('Solution', attributes)
+ATTRIBUTES = ['backend', 'action', 'trajectory', 'rho_end', 'time', 'command']
+Solution = namedtuple('Solution', ATTRIBUTES)
 
-interp = lambda x, y: interp1d(x, y, fill_value=(y[0], y[-1]), bounds_error=False)
-
+def interp(x, y):
+    """
+    :returns: One-dimensional function
+    """
+    return interp1d(x, y, fill_value=(y[0], y[-1]), bounds_error=False)
 
 def bubbler(potential, backend="cosmotransitions", **kwargs):
     """
@@ -96,7 +99,7 @@ def profiles(potential, backends=None, **kwargs):
 
     # Make profile plot
 
-    fig, ax = plt.subplots()
+    _, ax = plt.subplots()
     colors = cycle(["Brown", "Green", "Blue"])
 
     for result in results.itervalues():

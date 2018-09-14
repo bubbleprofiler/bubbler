@@ -13,7 +13,6 @@ from cosmoTransitions.pathDeformation import fullTunneling
 from timer import clock
 
 
-
 def solve(potential, dim=3, **kwargs):
     """
     :param potential: Potential object or string
