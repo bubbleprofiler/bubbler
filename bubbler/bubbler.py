@@ -34,10 +34,9 @@ from potential import Potential, one_dim_potential
 import cosmotransitions
 import bubbleprofiler
 import anybubble
-import shooting
 
 
-BACKENDS = ["cosmotransitions", "bubbleprofiler", "anybubble", "shooting"]
+BACKENDS = ["cosmotransitions", "bubbleprofiler", "anybubble"]
 
 attributes = ['backend', 'action', 'trajectory', 'rho_end', 'time', 'command']
 Solution = namedtuple('Solution', attributes)
