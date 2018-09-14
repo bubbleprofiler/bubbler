@@ -44,10 +44,8 @@ def solve(potential, dim=3, **kwargs):
     # Make initial guess of trajectory
 
     guess = np.empty([2, potential.n_fields])
-
-    for i in range(potential.n_fields):
-        guess[0, i] = potential.true_vacuum[i]
-        guess[1, i] = potential.false_vacuum[i]
+    guess[0, :] = potential.true_vacuum
+    guess[1, :] = potential.false_vacuum
 
     # Run CosmoTransitions
 
