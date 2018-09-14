@@ -43,7 +43,8 @@ class Potential(object):
                  ginac_potential,
                  true_vacuum=None,
                  false_vacuum=None,
-                 barrier=None):
+                 barrier=None,
+                 polish=True):
         """
         :param potential: Potential as ginac string
         """
@@ -58,11 +59,17 @@ class Potential(object):
         self._gradient_functions = [lambdify(self.field_names, gradient)
                                     for gradient in self._sympy_gradient]
 
-        if true_vacuum and false_vacuum and barrier:
+        if polish and true_vacuum and false_vacuum and barrier:
 
             self.true_vacuum = self._nsolve(true_vacuum)
             self.false_vacuum = self._nsolve(false_vacuum)
             self.barrier = self._nsolve(barrier)
+
+        elif true_vacuum and false_vacuum and barrier:
+
+            self.true_vacuum = np.array(true_vacuum)
+            self.false_vacuum = np.array(false_vacuum)
+            self.barrier = np.array(barrier)
 
         else:
 
