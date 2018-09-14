@@ -20,7 +20,7 @@ SCRIPT = """
 SetDirectory["{0}"]
 << anybubble`
 potential = ToExpression["{1}"];
-sol = FindBubble[potential, chi, {2}, {3}, SpaceTimeDimension -> {4}, PowellVerbosity -> 0, Verbose -> False];
+sol = FindBubble[potential, q, {2}, {3}, SpaceTimeDimension -> {4}, PowellVerbosity -> 0, Verbose -> False];
 action = sol[[1]];
 R = Subdivide[0, 100, 1000] // N;
 fields = Map[sol[[2]], R];
@@ -47,9 +47,9 @@ def solve(potential, output=None, dim=3, **kwargs):
     # Make potential in Mathematica format
 
     math_potential = potential.ginac_potential
-
+    print math_potential
     for i, n in enumerate(potential.field_names):
-        math_potential = math_potential.replace(str(n), "chi[{}]".format(i + 1))
+        math_potential = math_potential.replace(str(n), "q[{}]".format(i + 1))
 
     # Make extrema in Mathematica format
 
