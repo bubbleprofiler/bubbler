@@ -47,7 +47,11 @@ def solve(potential, output=None, dim=3, **kwargs):
     # Make potential in Mathematica format
 
     math_potential = potential.ginac_potential
-    print math_potential
+
+    for n in potential.field_names:
+        if "q" in n:
+            raise ValueError("Field name cannot contain q")
+
     for i, n in enumerate(potential.field_names):
         math_potential = math_potential.replace(str(n), "q[{}]".format(i + 1))
 
