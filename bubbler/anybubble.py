@@ -49,7 +49,7 @@ def solve(potential, output=None, dim=3, **kwargs):
     math_potential = potential.ginac_potential
 
     for n in potential.field_names:
-        if "q" in n:
+        if "q" in str(n):
             raise ValueError("Field name cannot contain q")
 
     for i, n in enumerate(potential.field_names):
