@@ -24,6 +24,7 @@ def solve(potential,
           rtol_action=1E-3,
           rtol_fields=1E-3,
           int_method='runge-kutta-4',
+          shooting=True,
           dim=3):
     """
     :param potential: Potential object or string
@@ -33,9 +34,14 @@ def solve(potential,
 
     assert dim == 3, "dim = 3 only at the moment"
 
+    if potential.n_fields > 1:
+        shooting = False
+
     # System call to BubblerProfiler executable
 
-    output = output if output else tempfile.mkdtemp()
+    shooting_str = "" if shooting else "--perturbative"
+
+    output = output if output else tempfile.mkstemp()[1]
 
     field_names = " ".join(["--field '{}'".format(n)
                             for n in potential.field_names])
@@ -44,11 +50,10 @@ def solve(potential,
     true_vacuum = " ".join(["--global-minimum {}".format(v)
                             for v in potential.true_vacuum])
 
-    template = ("{0}/bin/run_cmd_line_potential --force-output "
-                "--perturbative "
+    template = ("{0}/bin/run_cmd_line_potential --force-output --write-profiles "
                 "--potential '{1}' "
                 "{2} "
-                "--output-path {3} "
+                "--output-file {3} "
                 "--grid-points {4} "
                 "--knots {5} "
                 "--domain-start {6} "
@@ -58,6 +63,7 @@ def solve(potential,
                 "--rtol-action {10} "
                 "--rtol-fields {11} "
                 "--integration-method {12} "
+                "{13}"
                 "> /dev/null 2>&1")
 
     command = template.format(os.environ["BUBBLEPROFILER"],
@@ -72,25 +78,24 @@ def solve(potential,
                               true_vacuum,
                               rtol_action,
                               rtol_fields,
-                              int_method)
+                              int_method,
+                              shooting_str)
+    print command
     try:
         with clock() as time:
             check_call(command, shell=True)
     except Exception as error:
         raise RuntimeError("BubbleProfiler crashed: {}".format(error))
 
-    # Read action from text files
+    # Read action
 
-    action_file = "{}/action.txt".format(output)
-    action = np.loadtxt(action_file, usecols=[1])[-1]
+    with open(output) as f:
+      action_line = f.readline()
+    action = float(action_line.split(":")[-1])
 
-    # Read fields from text files
+    # Read fields
 
-    field_file = "{}/field_profiles.txt".format(output)
-    trajectory_data = np.loadtxt(field_file)
-    max_iter = trajectory_data[:, 0].max()
-    where = np.where(trajectory_data[:, 0] == max_iter)
-    trajectory_data = trajectory_data[where, 1:][0]
+    trajectory_data = np.loadtxt(output)
 
     return action, trajectory_data, time.time, command
 
