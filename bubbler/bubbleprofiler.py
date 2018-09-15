@@ -80,7 +80,7 @@ def solve(potential,
                               rtol_fields,
                               int_method,
                               shooting_str)
-    print command
+
     try:
         with clock() as time:
             check_call(command, shell=True)
