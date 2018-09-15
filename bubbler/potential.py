@@ -16,7 +16,7 @@ Evaluate the potential at particular values of the fields:
 
 Find minima:
 
->>> print potential.true_vacuum, potential.false_vacuum, potential.barrier
+>>> print potential.true_vacuum, potential.false_vacuum
 
 Plot a one-dimensional potential:
 
@@ -43,7 +43,6 @@ class Potential(object):
                  ginac_potential,
                  true_vacuum=None,
                  false_vacuum=None,
-                 barrier=None,
                  polish=True):
         """
         :param potential: Potential as ginac string
@@ -59,23 +58,19 @@ class Potential(object):
         self._gradient_functions = [lambdify(self.field_names, gradient)
                                     for gradient in self._sympy_gradient]
 
-        if polish and true_vacuum and false_vacuum and barrier:
-
+        if polish and true_vacuum:
             self.true_vacuum = self._nsolve(true_vacuum)
-            self.false_vacuum = self._nsolve(false_vacuum)
-            self.barrier = self._nsolve(barrier)
-
-        elif true_vacuum and false_vacuum and barrier:
-
+        elif true_vacuum:
             self.true_vacuum = np.array(true_vacuum)
-            self.false_vacuum = np.array(false_vacuum)
-            self.barrier = np.array(barrier)
-
         else:
-
             self.true_vacuum = self._solve[0]
+
+        if polish and false_vacuum:
+            self.false_vacuum = self._nsolve(false_vacuum)
+        elif true_vacuum:
+            self.false_vacuum = np.array(false_vacuum)
+        else:
             self.false_vacuum = self._solve[1]
-            self.barrier = self._solve[2]
 
         self.potential_latex = "$V = {}$".format(latex(self._sympy_potential))
         self.field_latex = [latex(n, mode="inline") for n in self.field_names]
@@ -93,7 +88,7 @@ class Potential(object):
         :returns: Analytic solution to tapdole equations
         """
         extrema = solve(self._sympy_gradient, self.field_names, dict=True)
-        assert len(extrema) == 3
+        assert len(extrema) >= 3
         extrema = sorted(extrema, key=self._sympy_potential.subs)
         return [np.array([extreme[n] for n in self.field_names]).astype(float)
                 for extreme in extrema]

@@ -3,8 +3,7 @@ Compare results from different codes
 ====================================
 """
 
-from bubbler import bubblers
-from bubbler import Potential
+from bubbler import bubblers, Potential
 
 
 ginac_potentials = [None,
@@ -26,16 +25,16 @@ for n_fields, ginac_potential in enumerate(ginac_potentials):
         continue
 
     if n_fields > 1:
-        potential = Potential(ginac_potential, true_vacuum=[1.] * n_fields, barrier=[0.5] * n_fields, false_vacuum=[0.] * n_fields)
+        potential = Potential(ginac_potential, true_vacuum=[1.] * n_fields, false_vacuum=[0.] * n_fields)
     else:
         potential = Potential(ginac_potential)
 
-    results = bubblers(potential, backends=["cosmotransitions", "bubbleprofiler"])
+    results = bubblers(potential, backends=["cosmotransitions", "bubbleprofiler", "anybubble"])
 
     print "============================="
     print "{} fields".format(n_fields)
-    print "=============================" 
-    
+    print "============================="
+
     for result in results.itervalues():
         print "backend = {}. action = {}. time = {}".format(result.backend, result.action, result.time)
         print "command = {}".format(result.command)

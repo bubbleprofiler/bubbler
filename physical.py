@@ -9,8 +9,7 @@ export ANYBUBBLE=/PATH/TO/AnyBubble
 export PYTHONPATH=/PATH/TO/CosmoTransitions:/PATH/TO/BubbleProfiler/examples/sm-plus-singlet
 """
 
-from bubbler import bubblers
-from bubbler import Potential
+from bubbler import bubblers, Potential
 from sm_plus_singlet import generate_potential
 
 # Works
@@ -25,12 +24,11 @@ lambda_s = 0.688259
 # lambda_s = 1.76759
 
 p_dict = generate_potential(T, Tc, lambda_m, lambda_s)
-b = [0., 0.]
 tv = p_dict["true_vac"][::-1]  # Reverse them as my code likes the fields in alphabetical order!
 fv = p_dict["false_vac"][::-1]
 p = p_dict["potential_str"]
 
-potential = Potential(p, polish=False, barrier=b, true_vacuum=tv, false_vacuum=fv)
+potential = Potential(p, true_vacuum=tv, false_vacuum=fv)
 
 results = bubblers(potential, backends=["cosmotransitions", "bubbleprofiler", "anybubble"])
 
