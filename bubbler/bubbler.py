@@ -37,15 +37,34 @@ import anybubble
 
 
 BACKENDS = ["cosmotransitions", "bubbleprofiler", "anybubble"]
-
 ATTRIBUTES = ['backend', 'action', 'trajectory', 'rho_end', 'time', 'command']
-Solution = namedtuple('Solution', ATTRIBUTES)
 
 def interp(x, y):
     """
     :returns: One-dimensional function
     """
     return interp1d(x, y, fill_value=(y[0], y[-1]), bounds_error=False)
+
+class Solution(namedtuple('Solution', ATTRIBUTES)):
+    """
+    Single solution.
+    """
+    def __str__(self):
+        """
+        :returns: Pretty string of a solution
+        """
+        form = "=== {} ===\naction = {}\ntime = {}\ncommand = {}"
+        return form.format(self.backend, self.action, self.time, self.command)
+
+class Solutions(dict):
+    """
+    List of solutions.
+    """
+    def __str__(self):
+        """
+        :returns: Pretty string of a list of solutions
+        """
+        return "\n\n".join([str(s) for s in self.itervalues()])
 
 def bubbler(potential, backend="cosmotransitions", **kwargs):
     """
@@ -86,7 +105,7 @@ def bubblers(potential, backends=None, **kwargs):
     """
     potential = Potential(potential) if isinstance(potential, str) else potential
     backends = backends if backends else BACKENDS
-    return {backend: bubbler(potential, backend=backend, **kwargs) for backend in backends}
+    return Solutions({b: bubbler(potential, backend=b, **kwargs) for b in backends})
 
 def profiles(potential, backends=None, **kwargs):
     """
