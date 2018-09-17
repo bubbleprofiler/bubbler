@@ -35,17 +35,21 @@ def physical(T, T_C, lambda_m, lambda_s, backends=None):
 
 if __name__ == "__main__":
 
-    # Works
+    # Works for all codes
+
     print physical(85., 110., 1.5, 0.688259)
 
-    # Fails
+    # Fails for us
+
     print physical(85., 110., 1.5,  1.76759)
 
-    # Scan in final coupling
+    # Scan in coupling and check for failures
 
     lambda_ = np.linspace(0., 2., 100)
 
-    n_total = n_b = n_c = 0
+    n_total = 0
+    n_b = 0
+    n_c = 0
 
     for l in lambda_:
 
@@ -56,10 +60,10 @@ if __name__ == "__main__":
 
         n_total += 1
 
-        if r["bubbleprofiler"].action:
+        if r["bubbleprofiler"].action is not None:
             n_b += 1
-        if r["cosmotransitions"].action:
+        if r["cosmotransitions"].action is not None:
             n_c += 1
 
-    print "cosmo", float(n_c) / n_total
-    print "us", float(n_c) / n_total
+    print "cosmo", n_c, n_total
+    print "us", n_b, n_total
