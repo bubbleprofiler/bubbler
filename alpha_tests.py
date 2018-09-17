@@ -29,7 +29,6 @@ for alpha in alphas:
 
     results = one_dim_bubblers(E, alpha,
                                backends=['bubbleprofiler', 'cosmotransitions'])
-
     action_bp.append(results['bubbleprofiler'].action)
     action_ct.append(results['cosmotransitions'].action)
     end_bp.append(results['bubbleprofiler'].rho_end)
@@ -37,11 +36,7 @@ for alpha in alphas:
     time_bp.append(results['bubbleprofiler'].time)
     time_ct.append(results['cosmotransitions'].time)
 
-    for result in results.itervalues():
-        print "backend = {}. action = {}".format(result.backend, result.action)
-        print "command = ", result.command
-
-
+    print results
 
 rdiff = [abs(a - b) / a if a and b else 1E5 for a, b in zip(action_ct, action_bp)]
 

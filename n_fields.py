@@ -35,6 +35,4 @@ for n_fields, ginac_potential in enumerate(ginac_potentials):
     print "{} fields".format(n_fields)
     print "============================="
 
-    for result in results.itervalues():
-        print "backend = {}. action = {}. time = {}".format(result.backend, result.action, result.time)
-        print "command = {}".format(result.command)
+    print results
