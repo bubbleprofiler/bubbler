@@ -58,16 +58,16 @@ class Potential(object):
         self._gradient_functions = [lambdify(self.field_names, gradient)
                                     for gradient in self._sympy_gradient]
 
-        if polish and true_vacuum:
+        if polish and true_vacuum is not None:
             self.true_vacuum = self._nsolve(true_vacuum)
-        elif true_vacuum:
+        elif true_vacuum is not None:
             self.true_vacuum = np.array(true_vacuum)
         else:
             self.true_vacuum = self._solve[0]
 
-        if polish and false_vacuum:
+        if polish and false_vacuum is not None:
             self.false_vacuum = self._nsolve(false_vacuum)
-        elif true_vacuum:
+        elif true_vacuum is not None:
             self.false_vacuum = np.array(false_vacuum)
         else:
             self.false_vacuum = self._solve[1]
