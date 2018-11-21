@@ -61,14 +61,14 @@ class Potential(object):
         if polish and true_vacuum is not None:
             self.true_vacuum = self._nsolve(true_vacuum)
         elif true_vacuum is not None:
-            self.true_vacuum = np.array(true_vacuum)
+            self.true_vacuum = np.atleast_1d(true_vacuum)
         else:
             self.true_vacuum = self._solve[0]
 
         if polish and false_vacuum is not None:
             self.false_vacuum = self._nsolve(false_vacuum)
         elif true_vacuum is not None:
-            self.false_vacuum = np.array(false_vacuum)
+            self.false_vacuum = np.atleast_1d(false_vacuum)
         else:
             self.false_vacuum = self._solve[1]
 
