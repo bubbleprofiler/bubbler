@@ -31,9 +31,6 @@ def solve(potential,
     :returns: Action, trajectory of bounce, time taken and extra information
     :rtype: tuple
     """
-
-    assert dim == 3, "dim = 3 only at the moment"
-
     if potential.n_fields > 1:
         shooting = False
 
@@ -63,7 +60,8 @@ def solve(potential,
                 "--rtol-action {10} "
                 "--rtol-fields {11} "
                 "--integration-method {12} "
-                "{13}"
+                "--n-dims {13}"
+                "{14}"
                 "> /dev/null 2>&1")
 
     command = template.format(os.environ["BUBBLEPROFILER"],
@@ -79,6 +77,7 @@ def solve(potential,
                               rtol_action,
                               rtol_fields,
                               int_method,
+                              dim,
                               shooting_str)
 
     try:
