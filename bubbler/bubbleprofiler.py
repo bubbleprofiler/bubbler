@@ -61,7 +61,8 @@ def solve(potential,
                 "--rtol-fields {rtol_fields} "
                 "--integration-method {int_method} "
                 "--n-dims {dim}"
-                "{shooting_str}")
+                "{shooting_str}"
+                " > /dev/null 2>&1")
 
     command = template.format(loc=os.environ["BUBBLEPROFILER"],
                               ginac_potential=potential.ginac_potential,
