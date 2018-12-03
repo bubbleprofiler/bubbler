@@ -47,38 +47,37 @@ def solve(potential,
     true_vacuum = " ".join(["--global-minimum {}".format(v)
                             for v in potential.true_vacuum])
 
-    template = ("{0}/bin/run_cmd_line_potential --force-output --write-profiles "
-                "--potential '{1}' "
-                "{2} "
-                "--output-file {3} "
-                "--grid-points {4} "
-                "--knots {5} "
-                "--domain-start {6} "
-                "--domain-end {7} "
-                "{8} "
-                "{9} "
-                "--rtol-action {10} "
-                "--rtol-fields {11} "
-                "--integration-method {12} "
-                "--n-dims {13}"
-                "{14}"
-                "> /dev/null 2>&1")
+    template = ("{loc}/bin/run_cmd_line_potential --force-output --write-profiles "
+                "--potential '{ginac_potential}' "
+                "{field_names} "
+                "--output-file {output} "
+                "--grid-points {n_spline_samples} "
+                "--knots {n_knots} "
+                "--domain-start {rho_min} "
+                "--domain-end {rho_max} "
+                "{false_vacuum} "
+                "{true_vacuum} "
+                "--rtol-action {rtol_action} "
+                "--rtol-fields {rtol_fields} "
+                "--integration-method {int_method} "
+                "--n-dims {dim}"
+                "{shooting_str}")
 
-    command = template.format(os.environ["BUBBLEPROFILER"],
-                              potential.ginac_potential,
-                              field_names,
-                              output,
-                              n_spline_samples,
-                              n_knots,
-                              rho_min,
-                              rho_max,
-                              false_vacuum,
-                              true_vacuum,
-                              rtol_action,
-                              rtol_fields,
-                              int_method,
-                              dim,
-                              shooting_str)
+    command = template.format(loc=os.environ["BUBBLEPROFILER"],
+                              ginac_potential=potential.ginac_potential,
+                              field_names=field_names,
+                              output=output,
+                              n_spline_samples=n_spline_samples,
+                              n_knots=n_knots,
+                              rho_min=rho_min,
+                              rho_max=rho_max,
+                              false_vacuum=false_vacuum,
+                              true_vacuum=true_vacuum,
+                              rtol_action=rtol_action,
+                              rtol_fields=rtol_fields,
+                              int_method=int_method,
+                              dim=dim,
+                              shooting_str=shooting_str)
 
     try:
         with clock() as time:
@@ -89,7 +88,7 @@ def solve(potential,
     # Read action
 
     with open(output) as f:
-      action_line = f.readline()
+        action_line = f.readline()
     action = float(action_line.split(":")[-1])
 
     # Read fields
