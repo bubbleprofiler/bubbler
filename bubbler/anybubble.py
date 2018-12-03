@@ -12,21 +12,20 @@ import tempfile
 import numpy as np
 from subprocess32 import check_output
 
-from timer import clock
-
 
 SCRIPT = """
 #!/usr/bin/env wolframscript
 SetDirectory["{0}"]
 << anybubble`
 potential = ToExpression["{1}"];
-sol = FindBubble[potential, q, {2}, {3}, SpaceTimeDimension -> {4}, PowellVerbosity -> 0, Verbose -> False];
+{{time, sol}} = Timing[FindBubble[potential, q, {2}, {3}, SpaceTimeDimension -> {4}, PowellVerbosity -> 0, Verbose -> False]];
 action = sol[[1]];
 R = Subdivide[0, 100, 1000] // N;
 fields = Map[sol[[2]], R];
 traj = MapThread[Append, {{fields, R}}];
 Export["{5}/traj.txt", traj, "Table"];
 Export["{5}/action.txt", action // CForm];
+Export["{5}/time.txt", time // CForm];
 Quit[];
 """
 
@@ -79,12 +78,11 @@ def solve(potential, output=None, dim=3, **kwargs):
     command = 'math -script {}'.format(script_file)
 
     try:
-        with clock() as time:
-            check_output(command, shell=True)
+        check_output(command, shell=True)
     except Exception as error:
         raise RuntimeError("AnyBubble crashed: {}".format(error))
 
-    # Read action and trajectory from text files
+    # Read action, time and trajectory from text files
 
     trajectory_file = "{}/traj.txt".format(output)
     trajectory_data = np.loadtxt(trajectory_file)
@@ -95,7 +93,10 @@ def solve(potential, output=None, dim=3, **kwargs):
     action_file = "{}/action.txt".format(output)
     action = float(np.loadtxt(action_file))
 
-    return action, trajectory_data, time.time, command
+    time_file = "{}/time.txt".format(output)
+    time = float(np.loadtxt(time_file))
+
+    return action, trajectory_data, time, command
 
 if __name__ == "__main__":
     import doctest
