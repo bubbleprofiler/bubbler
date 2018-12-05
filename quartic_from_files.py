@@ -33,6 +33,11 @@ TIME = "time_ct.npy"
 
 def make_fig(alphas, action_ct, action_bp, time_ct, time_bp, name, plot_time=True):
 
+    # Make numpy arrays and replace any missing data (None types) with inf
+
+    action_ct = np.array(action_ct, dtype=float)
+    action_bp = np.array(action_bp, dtype=float)
+
     rdiff = abs((action_ct - action_bp) / action_bp)
 
     fig = plt.figure(figsize=(12, 20))
