@@ -27,24 +27,11 @@ RC_PARAMS = {'text.latex.preamble' : [r'\usepackage{amsmath}'],
              'legend.edgecolor': 'black',
              'savefig.bbox': 'tight'}
 
-
-# Load BubbleProfiler results. The data file should me made via
-# ./quartic_tabulate 3 0.5001  0.74999 0.0001 > ~/repos/bubbler/bp.dat
-
-data = np.loadtxt("bp.dat", unpack=True)
-alphas = data[2]
-E = data[1][0]
-action_bp = data[3]
-time_bp = data[4] * 1e-3  # Convert from ms to s
-
-
-# Make CosmoTransitions results
-
 ACTION = "action_ct.npy"
 TIME = "time_ct.npy"
 
 
-def make_fig(action_ct, action_bp, time_ct, time_bp, name, plot_time=True):
+def make_fig(alpha, action_ct, action_bp, time_ct, time_bp, name, plot_time=True):
 
     rdiff = abs((action_ct - action_bp) / action_bp)
 
@@ -85,9 +72,21 @@ def make_fig(action_ct, action_bp, time_ct, time_bp, name, plot_time=True):
 if __name__ == "__main__":
 
     try:
+        data = np.loadtxt("bp.dat", unpack=True)
+    except IOError:
+        raise IOError("Must make bp.dat data file by "
+                       "./quartic_tabulate 3 0.5001 0.74999 0.0001 > /bubbler/bp.dat")
+    alphas = data[2]
+    E = data[1][0]
+    action_bp = data[3]
+    time_bp = data[4] * 1e-3  # Convert from ms to s
+
+    try:
         action_ct = np.load(ACTION)
         time_ct = np.load(TIME)
     except:
+
+        # Make CosmoTransitions results
 
         action_ct = np.zeros_like(alphas)
         time_ct = np.zeros_like(alphas)
@@ -107,4 +106,4 @@ if __name__ == "__main__":
         np.save(ACTION, action_ct)
         np.save(TIME, time_ct)
 
-    make_fig(action_ct, action_bp, time_ct, time_bp, "quartic_from_files.pdf")
+    make_fig(alphas, action_ct, action_bp, time_ct, time_bp, "quartic_from_files.pdf")

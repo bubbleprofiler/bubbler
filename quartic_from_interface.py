@@ -36,4 +36,4 @@ for alpha in alphas:
     print results
 
 
-make_fig(action_ct, action_bp, time_ct, time_bp, "quartic_from_interface.pdf")
+make_fig(alphas, action_ct, action_bp, time_ct, time_bp, "quartic_from_interface.pdf")
