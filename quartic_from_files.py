@@ -31,7 +31,7 @@ ACTION = "action_ct.npy"
 TIME = "time_ct.npy"
 
 
-def make_fig(alpha, action_ct, action_bp, time_ct, time_bp, name, plot_time=True):
+def make_fig(alphas, action_ct, action_bp, time_ct, time_bp, name, plot_time=True):
 
     rdiff = abs((action_ct - action_bp) / action_bp)
 
