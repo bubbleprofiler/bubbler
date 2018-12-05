@@ -17,7 +17,7 @@ from timer import clock
 
 def solve(potential,
           output=None,
-          n_spline_samples=1000,
+          step_size=0.01,
           n_knots=100,
           rho_min=-1.,
           rho_max=-1.,
@@ -51,7 +51,7 @@ def solve(potential,
                 "--potential '{ginac_potential}' "
                 "{field_names} "
                 "--output-file {output} "
-                "--grid-points {n_spline_samples} "
+                "--initial-step-size {step_size} "
                 "--knots {n_knots} "
                 "--domain-start {rho_min} "
                 "--domain-end {rho_max} "
@@ -60,7 +60,7 @@ def solve(potential,
                 "--rtol-action {rtol_action} "
                 "--rtol-fields {rtol_fields} "
                 "--integration-method {int_method} "
-                "--n-dims {dim}"
+                "--n-dims {dim} "
                 "{shooting_str}"
                 " > /dev/null 2>&1")
 
@@ -68,7 +68,7 @@ def solve(potential,
                               ginac_potential=potential.ginac_potential,
                               field_names=field_names,
                               output=output,
-                              n_spline_samples=n_spline_samples,
+                              step_size=step_size,
                               n_knots=n_knots,
                               rho_min=rho_min,
                               rho_max=rho_max,
