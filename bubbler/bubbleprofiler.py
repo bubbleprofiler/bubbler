@@ -18,7 +18,6 @@ from timer import clock
 def solve(potential,
           output=None,
           step_size=0.01,
-          n_knots=100,
           rho_min=-1.,
           rho_max=-1.,
           rtol_action=1E-3,
@@ -52,7 +51,6 @@ def solve(potential,
                 "{field_names} "
                 "--output-file {output} "
                 "--initial-step-size {step_size} "
-                "--knots {n_knots} "
                 "--domain-start {rho_min} "
                 "--domain-end {rho_max} "
                 "{false_vacuum} "
@@ -69,7 +67,6 @@ def solve(potential,
                               field_names=field_names,
                               output=output,
                               step_size=step_size,
-                              n_knots=n_knots,
                               rho_min=rho_min,
                               rho_max=rho_max,
                               false_vacuum=false_vacuum,
