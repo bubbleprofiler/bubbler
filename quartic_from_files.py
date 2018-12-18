@@ -30,6 +30,9 @@ RC_PARAMS = {'text.latex.preamble' : [r'\usepackage{amsmath}'],
 ACTION = "action_ct.npy"
 TIME = "time_ct.npy"
 
+def analytic(alpha):
+    return 4. * np.pi / (81. * (alpha - 0.5)**2)
+
 
 def make_fig(alphas, action_ct, action_bp, time_ct, time_bp, name, plot_time=True):
 
@@ -37,6 +40,7 @@ def make_fig(alphas, action_ct, action_bp, time_ct, time_bp, name, plot_time=Tru
 
     action_ct = np.array(action_ct, dtype=float)
     action_bp = np.array(action_bp, dtype=float)
+    action_thin = analytic(alphas)
 
     rdiff = abs((action_ct - action_bp) / action_bp)
 
@@ -47,6 +51,7 @@ def make_fig(alphas, action_ct, action_bp, time_ct, time_bp, name, plot_time=Tru
     ax_1 = plt.subplot(311)
     ax_1.plot(alphas, action_ct, '--', label=r"\texttt{CosmoTransitions}", color="Brown", lw=3)
     ax_1.plot(alphas, action_bp, '-', label=r"\texttt{BubbleProfiler}", color="Green", lw=3)
+    ax_1.plot(alphas, action_thin, ':', label=r"Thin-wall approximation", color="Red", lw=3)
     ax_1.set_ylabel("Action, $S$")
     ax_1.legend(numpoints=1, fontsize=16, loc='best')
     ax_1.set_yscale('log')
