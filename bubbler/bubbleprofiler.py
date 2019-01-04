@@ -17,7 +17,7 @@ from timer import clock
 
 def solve(potential,
           output=None,
-          step_size=0.01,
+          step_size=0.1,
           rho_min=-1.,
           rho_max=-1.,
           rtol_action=1E-3,
