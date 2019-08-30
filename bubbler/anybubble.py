@@ -43,17 +43,6 @@ def solve(potential, output=None, dim=3, **kwargs):
 
     output = output if output else tempfile.mkdtemp()
 
-    # Make potential in Mathematica format
-
-    math_potential = potential.ginac_potential
-
-    for n in potential.field_names:
-        if "q" in str(n):
-            raise ValueError("Field name cannot contain q")
-
-    for i, n in enumerate(potential.field_names):
-        math_potential = math_potential.replace(str(n), "q[{}]".format(i + 1))
-
     # Make extrema in Mathematica format
 
     true_vacuum = curly(potential.true_vacuum)
@@ -62,7 +51,7 @@ def solve(potential, output=None, dim=3, **kwargs):
     # Make Mathematica script that solves this problem
 
     script = SCRIPT.format(os.environ["ANYBUBBLE"],
-                           math_potential,
+                           potential.mathematica_potential,
                            true_vacuum,
                            false_vacuum,
                            dim,

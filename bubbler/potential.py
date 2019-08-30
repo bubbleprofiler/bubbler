@@ -30,9 +30,11 @@ Make a one-dimensional potential
 from sympy.utilities.lambdify import lambdify
 from sympy import diff, sympify, latex
 from sympy.solvers import nsolve, solve
+from sympy.printing.cxxcode import cxxcode
 
 import matplotlib.pyplot as plt
 import numpy as np
+import re
 
 
 class Potential(object):
@@ -50,6 +52,7 @@ class Potential(object):
         self.ginac_potential = ginac_potential
         self._sympy_potential = sympify(self.ginac_potential)
         self.field_names = list(self._sympy_potential.free_symbols)
+        self.field_names_str = map(str, self.field_names)
         self.n_fields = len(self.field_names)
         self._potential = lambdify(self.field_names, self._sympy_potential)
 
@@ -106,6 +109,44 @@ class Potential(object):
         """
         return self._potential(*fields)
 
+    def names_to_array(self, string, array_name="q", zero_based=True):
+        """
+        :returns: String with field names replaced by an indexed array
+        """
+        shift = 0 if zero_based else 1
+
+        for i, name in enumerate(self.field_names_str):
+            if array_name in name:
+                raise ValueError("Field name cannot contain {}".format(array_name))
+            find = r"(\W)({})(\W)".format(name)
+            replace = r"\1{}[{}]\3".format(array_name, i + shift)
+            string = re.sub(find, replace, string)
+
+        return string
+
+    @property
+    def mathematica_potential(self):
+        """
+        @returns Potential in Mathematica format
+        """
+        return self.names_to_array(self.ginac_potential, zero_based=False)
+
+    @property
+    def c_potential(self):
+        """
+        @returns Potential in C format
+        """
+        return self.names_to_array(cxxcode(self.ginac_potential))
+
+    @property
+    def c_gradient(self, pattern="dvdq[{}] = {};"):
+        """
+        @returns Gradient in very particlar C format
+        """
+        lines = [pattern.format(i, cxxcode(g)) for i, g in enumerate(self._sympy_gradient)]
+        joined = "\n".join(lines)
+        return self.names_to_array(joined)
+
     def plot(self):
         """
         Plot a one-dimensional potential
@@ -116,6 +157,9 @@ class Potential(object):
         plt.xlabel(self.field_latex[0])
         plt.ylabel(self.potential_latex)
         plt.show()
+
+    def __str__(self):
+        return self.ginac_potential
 
 class one_dim_potential(Potential):
     """
