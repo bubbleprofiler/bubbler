@@ -1,0 +1,37 @@
+diff --git a/cosmoTransitions/pathDeformation.py b/cosmoTransitions/pathDeformation.py
+index 52454b7..bb2e128 100644
+--- a/cosmoTransitions/pathDeformation.py
++++ b/cosmoTransitions/pathDeformation.py
+@@ -755,11 +755,18 @@ class SplinePath:
+         if extend_to_minima:
+             def V_lin(x, p0, dp0, V): return V(p0+x*dp0)
+             # extend at the front of the path
+-            xmin = optimize.fmin(V_lin, 0.0, args=(pts[0], dpts[0], V),
+-                                 xtol=1e-6, disp=0)[0]
+-            if xmin > 0.0: xmin = 0.0
+-            nx = np.ceil(abs(xmin)-.5) + 1
+-            x = np.linspace(xmin, 0, nx)[:, np.newaxis]
++
++            try:
++                xmin = optimize.fmin(V_lin, 0.0, args=(pts[0], dpts[0], V),
++                                     xtol=1e-6, disp=0)[0]
++                if xmin > 0.0: xmin = 0.0
++                nx = np.ceil(abs(xmin)-.5) + 1
++                x = np.linspace(xmin, 0, nx)[:, np.newaxis]
++            except:
++                xmin = 0.
++                nx = np.ceil(abs(xmin)-.5) + 1
++                x = np.linspace(xmin, 0, nx)[:, np.newaxis]
++
+             pt_ext = pts[0] + x*dpts[0]
+             pts = np.append(pt_ext, pts[1:], axis=0)
+             # extend at the end of the path
+@@ -838,7 +845,7 @@ class SplinePath:
+ def fullTunneling(path_pts, V, dV, maxiter=20, fixEndCutoff=.03,
+                   save_all_steps=False, verbose=False,
+                   callback=None, callback_data=None,
+-                  V_spline_samples=100,
++                  V_spline_samples=None,
+                   tunneling_class=tunneling1D.SingleFieldInstanton,
+                   tunneling_init_params={},
+                   tunneling_findProfile_params={},
